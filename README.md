@@ -1,14 +1,16 @@
 # CodeSense AI 💡
 ### Educational Code Review Assistant for Beginner Programmers
 **Course:** Prompt Engineering (SCSE4041) | **Milestone:** Milestone 2  
-**Total Marks:** 12 | **Project ID:** C4  
+**Total Marks:** 12 | **Project ID:** C4 | **Team:** CodeSense  
+**Team Leader:** Divakar Maurya (`S24CSEU0807`) | **Team Size:** 5 Members  
+**GitHub Repository:** [https://github.com/div339175/CodeSense-AI](https://github.com/div339175/CodeSense-AI)  
 **Target Audience:** First-Year Undergraduate CS Students (C++, Python, Java)  
 
 [![Python Version](https://img.shields.io/badge/python-3.14%2B-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.162.0-009688.svg)](https://fastapi.tiangolo.com/)
 [![Tests](https://img.shields.io/badge/pytest-26%20passed%20(100%25)-success.svg)](tests/)
-[![Anti-Leakage](https://img.shields.io/badge/Solution%20Leakage-0.0%25%20(Guaranteed)-brightgreen.svg)](prompts/final_prompt.txt)
-[![Milestone 2](https://img.shields.io/badge/Milestone-2%20Complete-indigo.svg)](docs/MILESTONE_2_SUBMISSION_CHECKLIST.md)
+[![Anti-Leakage](https://img.shields.io/badge/Solution%20Leakage-0.0%25%20(Guaranteed)-brightgreen.svg)](prompts/final/P3_final_prompt.txt)
+[![Milestone 2](https://img.shields.io/badge/Milestone-2%20Complete-indigo.svg)](docs/M2_C4_CodeSenseAI.pdf)
 
 ---
 
