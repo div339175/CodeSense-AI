@@ -1,10 +1,16 @@
-# CodeSense AI 💡
-### Educational Code Review Assistant for Beginner Programmers
+# CodeSense AI — Prompt-Driven Code Review Assistant 💡
+### Educational Socratic Code Review Assistant for Beginner Programmers
 **Course:** Prompt Engineering (SCSE4041) | **Milestone:** Milestone 2  
-**Total Marks:** 12 | **Project ID:** C4 | **Team:** CodeSense  
-**Team Leader:** Divakar Maurya (`S24CSEU0807`) | **Team Size:** 5 Members  
+**Total Marks:** 12 | **Project ID:** C4 | **Team Name:** PromptForge  
 **GitHub Repository:** [https://github.com/div339175/CodeSense-AI](https://github.com/div339175/CodeSense-AI)  
 **Target Audience:** First-Year Undergraduate CS Students (C++, Python, Java)  
+
+### 👥 Team PromptForge (5 Members)
+1. **Divakar Maurya (Team Leader)** — `S24CSEU0807` (Full-Stack & LLM Engineer)
+2. **Vrishank Pathak** — `S24CSEU0950` (Frontend & UI/UX Specialist)
+3. **Hardik Chawla** — `S24CSEU0750` (Prompt Engineering Specialist)
+4. **Arpit Phutela** — `S24CSEU1594` (QA & Testing Engineer)
+5. **Ronak** — `S24CSEU0377` (Technical Documentation & Demo Specialist)
 
 [![Python Version](https://img.shields.io/badge/python-3.14%2B-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.162.0-009688.svg)](https://fastapi.tiangolo.com/)
