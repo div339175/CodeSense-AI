@@ -7,6 +7,7 @@ import time
 import json
 import logging
 from typing import Dict, Any, Tuple, Optional
+from dotenv import load_dotenv
 import httpx
 
 from backend.config import (
@@ -14,6 +15,7 @@ from backend.config import (
     OPENAI_API_KEY,
     DEFAULT_PROVIDER,
     DEFAULT_MODEL,
+    GEMINI_FALLBACK_MODELS,
     FALLBACK_OPENAI_MODEL,
     API_TIMEOUT_SECONDS
 )
@@ -26,11 +28,29 @@ class LLMClient:
         self.openai_key = OPENAI_API_KEY
         self.default_provider = DEFAULT_PROVIDER
 
+    def get_gemini_key(self) -> str:
+        """Returns Gemini API key, reloading from .env if needed."""
+        key = os.getenv("GEMINI_API_KEY", "").strip() or self.gemini_key
+        if not key:
+            load_dotenv(override=True)
+            key = os.getenv("GEMINI_API_KEY", "").strip()
+            self.gemini_key = key
+        return key
+
+    def get_openai_key(self) -> str:
+        """Returns OpenAI API key, reloading from .env if needed."""
+        key = os.getenv("OPENAI_API_KEY", "").strip() or self.openai_key
+        if not key:
+            load_dotenv(override=True)
+            key = os.getenv("OPENAI_API_KEY", "").strip()
+            self.openai_key = key
+        return key
+
     def detect_available_provider(self) -> str:
         """Determines active provider based on configured API keys."""
-        if self.gemini_key:
+        if self.get_gemini_key():
             return "gemini"
-        if self.openai_key:
+        if self.get_openai_key():
             return "openai"
         return "mock"
 
@@ -55,9 +75,11 @@ class LLMClient:
 
         try:
             if provider == "gemini":
-                raw_text = await self._call_gemini(prompt)
+                raw_text, actual_model = await self._call_gemini(prompt)
+                provider = f"gemini ({actual_model})"
             elif provider == "openai":
                 raw_text = await self._call_openai(prompt)
+                provider = "openai"
             else:
                 raw_text = self._call_mock_engine(prompt_version, language, code, prompt)
                 provider = "mock"
@@ -69,13 +91,17 @@ class LLMClient:
         elapsed_ms = round((time.time() - start_time) * 1000, 2)
         return raw_text, provider, elapsed_ms
 
-    async def _call_gemini(self, prompt: str) -> str:
-        """Invokes Google Gemini API using REST endpoint."""
-        if not self.gemini_key:
-            raise ValueError("GEMINI_API_KEY is not configured.")
+    async def _call_gemini(self, prompt: str) -> Tuple[str, str]:
+        """Invokes Google Gemini API using REST endpoint with automatic model fallback."""
+        key = self.get_gemini_key()
+        if not key:
+            raise ValueError("GEMINI_API_KEY is not configured in .env")
 
-        # Try gemini-2.5-flash or gemini-1.5-flash
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/{DEFAULT_MODEL}:generateContent?key={self.gemini_key}"
+        models_to_try = []
+        for m in [DEFAULT_MODEL] + GEMINI_FALLBACK_MODELS:
+            if m and m not in models_to_try:
+                models_to_try.append(m)
+
         payload = {
             "contents": [{
                 "parts": [{"text": prompt}]
@@ -87,17 +113,32 @@ class LLMClient:
             }
         }
 
+        last_error = None
         async with httpx.AsyncClient(timeout=API_TIMEOUT_SECONDS) as client:
-            resp = await client.post(url, json=payload)
-            if resp.status_code != 200:
-                raise RuntimeError(f"Gemini API returned HTTP {resp.status_code}: {resp.text}")
-            
-            data = resp.json()
-            try:
-                text = data["candidates"][0]["content"]["parts"][0]["text"]
-                return text
-            except (KeyError, IndexError) as err:
-                raise RuntimeError(f"Unexpected response format from Gemini: {data}") from err
+            for model_name in models_to_try:
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={key}"
+                try:
+                    resp = await client.post(url, json=payload)
+                    if resp.status_code == 200:
+                        data = resp.json()
+                        text = data["candidates"][0]["content"]["parts"][0]["text"]
+                        return text, model_name
+                    elif resp.status_code in (404, 503, 429):
+                        logger.warning(f"Gemini model {model_name} returned {resp.status_code}. Trying next model...")
+                        last_error = RuntimeError(f"Gemini API ({model_name}) returned HTTP {resp.status_code}: {resp.text}")
+                        continue
+                    else:
+                        raise RuntimeError(f"Gemini API returned HTTP {resp.status_code}: {resp.text}")
+                except (KeyError, IndexError) as err:
+                    raise RuntimeError(f"Unexpected response format from Gemini: {resp.text}") from err
+                except httpx.RequestError as req_err:
+                    logger.warning(f"Network error querying {model_name}: {req_err}. Trying next...")
+                    last_error = req_err
+                    continue
+
+        if last_error:
+            raise last_error
+        raise RuntimeError("No Gemini models succeeded.")
 
     async def _call_openai(self, prompt: str) -> str:
         """Invokes OpenAI API."""

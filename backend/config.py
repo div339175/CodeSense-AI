@@ -20,7 +20,8 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
 
 # Default LLM settings
 DEFAULT_PROVIDER = os.getenv("DEFAULT_PROVIDER", "auto") # auto, gemini, openai, mock
-DEFAULT_MODEL = os.getenv("DEFAULT_MODEL", "gemini-2.5-flash")
+DEFAULT_MODEL = os.getenv("DEFAULT_MODEL", "gemini-3.5-flash")
+GEMINI_FALLBACK_MODELS = ["gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-3.6-flash", "gemini-3-flash-preview"]
 FALLBACK_OPENAI_MODEL = os.getenv("FALLBACK_OPENAI_MODEL", "gpt-4o-mini")
 
 # Supported Programming Languages
