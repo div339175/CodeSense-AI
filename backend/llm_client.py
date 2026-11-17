@@ -170,6 +170,10 @@ class LLMClient:
             bug_type = "null_pointer"
         elif "indentationerror" in code_lower or ("print(" in code and "  print(" not in code and "def " in code):
             bug_type = "indentation_error"
+        elif "prin(" in code or "prnt(" in code or "prntln(" in code or "prin(hello)" in code:
+            bug_type = "typo_print_func"
+        elif "print(hello)" in code or ("(hello)" in code and '"hello"' not in code and "'hello'" not in code):
+            bug_type = "typo_print_func"
         # Check known clean code patterns
         elif ("def add(" in code and "return a + b" in code) or ("sum is:" in code_lower and "arr[5]" not in code) or ("rectanglearea" in code_lower and "length * width" in code):
             is_clean = True
@@ -227,6 +231,15 @@ class LLMClient:
                     f"for (int i = 0; i < 5; i++) {{\n"
                     f"    std::cout << arr[i] << std::endl;\n"
                     f"}}\n"
+                    f"```"
+                )
+            elif bug_type == "typo_print_func":
+                return (
+                    f"There is a typo and a NameError in your Python code.\n"
+                    f"'prin' is misspelled, and 'hello' is not a defined variable.\n"
+                    f"Here is the corrected code:\n"
+                    f"```python\n"
+                    f"print(\"hello\")\n"
                     f"```"
                 )
             else:
@@ -291,6 +304,20 @@ class LLMClient:
                     }],
                     "positive_feedback": "Proper loop structure and array initialization.",
                     "next_step": "Review zero-based index ranges."
+                }, indent=2)
+            elif bug_type == "typo_print_func":
+                return json.dumps({
+                    "overall_assessment": "The code contains an undefined function call and unquoted text.",
+                    "language": language,
+                    "issues": [{
+                        "issue": "NameError: Undefined 'prin' / Missing String Quotes",
+                        "severity": "High",
+                        "explanation": "'prin' is not a built-in function in Python, and 'hello' without quotes is treated as an uninitialized variable.",
+                        "hint": "Change 'prin' to 'print' and put quotes around hello.",
+                        "concept_to_revise": "Built-in Functions and String Literals"
+                    }],
+                    "positive_feedback": "Good attempt at calling an output function.",
+                    "next_step": "Practice using single and double quotes for strings."
                 }, indent=2)
             else:
                 return json.dumps({
@@ -406,6 +433,21 @@ class LLMClient:
                     }],
                     "positive_feedback": "Good understanding of the mathematical recurrence relation.",
                     "next_step": "Trace recursive calls using a call-tree diagram on paper."
+                }, indent=2)
+
+            elif bug_type == "typo_print_func":
+                return json.dumps({
+                    "overall_assessment": "The code attempts to output a message to the console, but encounters a function naming typo and an unquoted string identifier.",
+                    "language": language,
+                    "issues": [{
+                        "issue": "NameError: Undefined Function Call & Missing String Quotes",
+                        "severity": "High",
+                        "explanation": "In Python, function names are case-sensitive and must be spelled exactly. 'prin' is not recognized by the Python interpreter and raises a NameError. Furthermore, writing hello without quotes causes Python to interpret it as a variable identifier rather than literal text.",
+                        "hint": "Examine the spelling of your output function: what is the standard Python built-in function used to display text on the screen? To display the literal word hello instead of looking for an unassigned variable, what punctuation marks (quotes) must surround the text?",
+                        "concept_to_revise": "Python Built-in Output Functions and String Literal Syntax"
+                    }],
+                    "positive_feedback": "You correctly used opening and closing parentheses for function invocation.",
+                    "next_step": "Review the distinction between variable identifiers and quoted string literals in Python."
                 }, indent=2)
 
             else:
