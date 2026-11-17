@@ -147,30 +147,45 @@ class LLMClient:
         is_clean = False
         bug_type = "unknown"
 
-        if "def add(" in code and "return a + b" in code or "sum is:" in code_lower and "arr[5]" not in code:
-            is_clean = True
-        elif ":" not in code and ("def " in code or "for " in code or "if " in code) and language.lower() == "python":
+        # Check known critical bug patterns first
+        if ":" not in code and any(keyword in code for keyword in ["def ", "for ", "if ", "while ", "elif "]) and language.lower() == "python":
             bug_type = "syntax_missing_colon"
         elif "/ 0" in code or "/0" in code or ("/ count" in code and "count == 0" not in code and "if" not in code):
             bug_type = "division_by_zero"
         elif "<= 5" in code or "<= arr.length" in code or "<= len(" in code:
             bug_type = "off_by_one_array"
-        elif "arr[10]" in code or "arr[5]" in code:
+        elif "arr[10]" in code or "arr[5]" in code or "scores[5]" in code or "grades[5]" in code:
             bug_type = "array_index_bounds"
         elif "while (" in code and "++" not in code and "+=" not in code and "break" not in code:
             bug_type = "infinite_loop"
-        elif "int x;" in code and "= x +" in code:
+        elif "while " in code and ":" in code and "+=" not in code and "break" not in code:
+            bug_type = "infinite_loop"
+        elif ("int sum;" in code or "int x;" in code) and ("= sum +" in code or "= x +" in code):
             bug_type = "uninitialized_var"
         elif "factorial" in code and "n == 0" not in code and "n <= 1" not in code:
             bug_type = "missing_base_case"
-        elif "count = 0" in code and "total = total - num" in code:
+        elif "total = total - num" in code or ("total = 0" in code and "- num" in code):
             bug_type = "accumulator_logic"
         elif "null" in code_lower and ".length()" in code:
             bug_type = "null_pointer"
-        elif "indentationerror" in code_lower or "print(" in code and "  print(" not in code and "def " in code:
+        elif "indentationerror" in code_lower or ("print(" in code and "  print(" not in code and "def " in code):
             bug_type = "indentation_error"
+        # Check known clean code patterns
+        elif ("def add(" in code and "return a + b" in code) or ("sum is:" in code_lower and "arr[5]" not in code) or ("rectanglearea" in code_lower and "length * width" in code):
+            is_clean = True
+        elif language.lower() == "python":
+            try:
+                compile(code, "<string>", "exec")
+                is_clean = True
+            except SyntaxError:
+                bug_type = "syntax_missing_colon"
+            except Exception:
+                bug_type = "general_bug"
+        elif "system.out.println(" in code_lower and "null" not in code_lower and "[" not in code:
+            is_clean = True
+        elif "cout <<" in code_lower and "arr" not in code_lower and "sum" not in code_lower:
+            is_clean = True
         else:
-            # General fallback bug
             bug_type = "general_bug"
 
         # --- GENERATE RESPONSES ACCORDING TO PROMPT VERSION ---
