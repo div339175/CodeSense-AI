@@ -150,7 +150,7 @@ def build_supporting_document_pdf(pdf_path: Path):
     story = []
 
     story.append(Paragraph("CodeSense AI — Supporting Document: Technical Report", st['title']))
-    story.append(Paragraph("Course: Prompt Engineering (SCSE4041) | Milestone 2 | Project ID: C4 | Team: PromptForge", st['subtitle']))
+    story.append(Paragraph("Course: Prompt Engineering (SCSE4041) | Milestone 2 | Team ID: PE-B25-04 | Batch: 31 | Faculty: Saurabh Srivastava", st['subtitle']))
     story.append(HRFlowable(width="100%", thickness=1.5, color=colors.HexColor("#0284c7"), spaceAfter=10))
 
     story.append(Paragraph("1. Executive Technical Summary", st['sub_heading']))
@@ -245,11 +245,11 @@ def build_milestone2_main_pdf(pdf_path: Path):
     cover_meta = [
         [Paragraph("<b>Course:</b>", st['tb']), Paragraph("SCSE4041 – Prompt Engineering", st['tb']),
          Paragraph("<b>Milestone:</b>", st['tb']), Paragraph("Milestone 2 (12 Marks)", st['tb'])],
-        [Paragraph("<b>Team ID:</b>", st['tb']), Paragraph("<b>C4</b>", st['tb']),
-         Paragraph("<b>Batch / Group:</b>", st['tb']), Paragraph("B13-24 (SCSE)", st['tb'])],
+        [Paragraph("<b>Team ID:</b>", st['tb']), Paragraph("<b>PE-B25-04</b>", st['tb']),
+         Paragraph("<b>Batch / Group:</b>", st['tb']), Paragraph("Batch 31 (SCSE)", st['tb'])],
         [Paragraph("<b>Team Name:</b>", st['tb']), Paragraph("<b>PromptForge</b>", st['tb']),
-         Paragraph("<b>Faculty Name:</b>", st['tb']), Paragraph("Course Faculty (SCSE4041)", st['tb'])],
-        [Paragraph("<b>Project Title:</b>", st['tb']), Paragraph("CodeSense AI — Prompt-Driven Code Review Assistant", st['tb']),
+         Paragraph("<b>Faculty Name:</b>", st['tb']), Paragraph("<b>Saurabh Srivastava</b>", st['tb'])],
+        [Paragraph("<b>Project Title:</b>", st['tb']), Paragraph("<b>CodeSense AI</b>", st['tb']),
          Paragraph("<b>Submission Date:</b>", st['tb']), Paragraph("November 22, 2026", st['tb'])]
     ]
     t_cov = Table(cover_meta, colWidths=[90, 180, 90, 180])
@@ -285,9 +285,9 @@ def build_milestone2_main_pdf(pdf_path: Path):
     story.append(Paragraph("<b>The Three Essential Submission Links:</b>", st['sub_heading']))
     links_data = [
         [Paragraph("<b>Link Type</b>", st['th']), Paragraph("<b>URL / Location</b>", st['th']), Paragraph("<b>Access Note</b>", st['th'])],
-        [Paragraph("<b>1. Prototype Link (Q11):</b>", st['tb']), Paragraph("http://localhost:8000/ (Deployed Web Dashboard)", st['tb']), Paragraph("Fully functional dashboard with live LLM & offline mock", st['tb'])],
+        [Paragraph("<b>1. Prototype Link (Q11):</b>", st['tb']), Paragraph("https://colab.research.google.com/drive/1xcvGSagdyYUclrS1Mfiia4ThE5WwVk76?usp=sharing", st['tb']), Paragraph("Google Colab with saved outputs (public access)", st['tb'])],
         [Paragraph("<b>2. Repository Link (Q12):</b>", st['tb']), Paragraph("https://github.com/div339175/CodeSense-AI", st['tb']), Paragraph("Public repository (prompts, code, test-data, CHANGELOG.md)", st['tb'])],
-        [Paragraph("<b>3. Reel / Video Link (Q13):</b>", st['tb']), Paragraph("https://drive.google.com/file/d/codesense-demo/view", st['tb']), Paragraph("Exact duration: <b>125 seconds</b> (within 90–150s guideline)", st['tb'])],
+        [Paragraph("<b>3. Reel / Video Link (Q13):</b>", st['tb']), Paragraph("https://youtu.be/AvP9nEpxXQ0", st['tb']), Paragraph("YouTube unlisted video | Exact duration: <b>125 seconds</b>", st['tb'])],
     ]
     t_links = Table(links_data, colWidths=[130, 240, 170])
     t_links.setStyle(TableStyle([
@@ -529,14 +529,14 @@ def build_milestone2_main_pdf(pdf_path: Path):
 
     story.append(Paragraph("<b>Team Contribution Table (Team PromptForge - 5 Members = 100%):</b>", st['sub_heading']))
     contrib_rows = [
-        [Paragraph("<b>#</b>", st['th']), Paragraph("<b>Member Name</b>", st['th']), Paragraph("<b>Enrollment / Adm No.</b>", st['th']), Paragraph("<b>Role</b>", st['th']), Paragraph("<b>Tasks Done in Milestone 2</b>", st['th']), Paragraph("<b>Evidence</b>", st['th']), Paragraph("<b>%</b>", st['th'])],
-        [Paragraph("1", st['tb']), Paragraph("<b>Divakar Maurya (Leader)</b>", st['tb']), Paragraph("<b>S24CSEU0807</b>", st['tb']), Paragraph("Full-Stack & LLM Engineer", st['tb']), Paragraph("Designed P3 prompt, built FastAPI backend app.py, LLM client, and GitHub repo", st['tb']), Paragraph("app.py, backend/, prompts/final/P3_final_prompt.txt", st['tb']), Paragraph("<b>20%</b>", st['tb'])],
-        [Paragraph("2", st['tb']), Paragraph("<b>Vrishank Pathak</b>", st['tb']), Paragraph("<b>S24CSEU0950</b>", st['tb']), Paragraph("Frontend & UI/UX Specialist", st['tb']), Paragraph("Built SPA dashboard, Prism code editor, and ReportLab PDF generator", st['tb']), Paragraph("frontend/, backend/report_generator.py", st['tb']), Paragraph("<b>20%</b>", st['tb'])],
-        [Paragraph("3", st['tb']), Paragraph("<b>Hardik Chawla</b>", st['tb']), Paragraph("<b>S24CSEU0750</b>", st['tb']), Paragraph("Prompt Engineering Specialist", st['tb']), Paragraph("Authored P1, P2 prompts, managed iteration log v1-v3 and Section 2 prompt sheet", st['tb']), Paragraph("prompts/v1/, prompts/v2/", st['tb']), Paragraph("<b>20%</b>", st['tb'])],
-        [Paragraph("4", st['tb']), Paragraph("<b>Arpit Phutela</b>", st['tb']), Paragraph("<b>S24CSEU1594</b>", st['tb']), Paragraph("QA & Testing Engineer", st['tb']), Paragraph("Designed 10 benchmark test cases (Normal/Edge/Invalid), test-data/ dataset", st['tb']), Paragraph("test-data/, experiments/", st['tb']), Paragraph("<b>20%</b>", st['tb'])],
-        [Paragraph("5", st['tb']), Paragraph("<b>Ronak</b>", st['tb']), Paragraph("<b>S24CSEU0377</b>", st['tb']), Paragraph("Documentation & Demo Specialist", st['tb']), Paragraph("Authored technical report, demo script, and 26 automated unit tests", st['tb']), Paragraph("docs/, tests/, demo/", st['tb']), Paragraph("<b>20%</b>", st['tb'])],
+        [Paragraph("<b>Member Name</b>", st['th']), Paragraph("<b>Enrollment No.</b>", st['th']), Paragraph("<b>Role</b>", st['th']), Paragraph("<b>Tasks Done in Milestone 2</b>", st['th']), Paragraph("<b>Evidence</b>", st['th']), Paragraph("<b>Contribution (%)</b>", st['th'])],
+        [Paragraph("<b>Divakar Maurya (Leader)</b>", st['tb']), Paragraph("<b>S24CSEU0807</b>", st['tb']), Paragraph("Full-Stack & LLM Engineer", st['tb']), Paragraph("Designed P3 prompt architecture, built FastAPI backend, Gemini API integration, and model fallback", st['tb']), Paragraph("app.py, backend/llm_client.py, 12 commits", st['tb']), Paragraph("<b>20%</b>", st['tb'])],
+        [Paragraph("<b>Vrishank Pathak</b>", st['tb']), Paragraph("<b>S24CSEU0950</b>", st['tb']), Paragraph("Frontend & UI/UX Specialist", st['tb']), Paragraph("Built SPA dashboard, Prism.js syntax highlighting, and sample bug library dropdown", st['tb']), Paragraph("frontend/, static/css/style.css, 8 commits", st['tb']), Paragraph("<b>20%</b>", st['tb'])],
+        [Paragraph("<b>Hardik Chawla</b>", st['tb']), Paragraph("<b>S24CSEU0750</b>", st['tb']), Paragraph("Prompt Engineering Specialist", st['tb']), Paragraph("Authored P1, P2 prompts, managed iteration log v1-v3, few-shot exemplars, and anti-leakage constraints", st['tb']), Paragraph("prompts/v1/, prompts/v2/, prompts/final/, 10 commits", st['tb']), Paragraph("<b>20%</b>", st['tb'])],
+        [Paragraph("<b>Arpit Phutela</b>", st['tb']), Paragraph("<b>S24CSEU1594</b>", st['tb']), Paragraph("QA & Testing Engineer", st['tb']), Paragraph("Designed 10 benchmark test cases (Normal/Edge/Invalid), test-data/ dataset, and automated pytest suite", st['tb']), Paragraph("tests/, test-data/test_inputs.json, 7 commits", st['tb']), Paragraph("<b>20%</b>", st['tb'])],
+        [Paragraph("<b>Ronak</b>", st['tb']), Paragraph("<b>S24CSEU0377</b>", st['tb']), Paragraph("Technical Documentation & Demo Specialist", st['tb']), Paragraph("Authored Milestone 2 technical report, recorded video demo, and prepared submission PDFs", st['tb']), Paragraph("docs/M2_PE-B25-04_CodeSenseAI.pdf, 6 commits", st['tb']), Paragraph("<b>20%</b>", st['tb'])],
     ]
-    t_contrib = Table(contrib_rows, colWidths=[15, 95, 75, 95, 130, 100, 30])
+    t_contrib = Table(contrib_rows, colWidths=[100, 75, 95, 140, 95, 35])
     t_contrib.setStyle(TableStyle([
         ('BACKGROUND', (0,0), (-1,0), colors.HexColor("#0f172a")),
         ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor("#cbd5e1")),
@@ -561,8 +561,11 @@ def build_milestone2_main_pdf(pdf_path: Path):
     print(f"[OK] Generated Milestone 2 Main PDF: {pdf_path}")
 
 if __name__ == "__main__":
+    import shutil
     supp_pdf = DOCS_DIR / "PromptForge_TechnicalReport.pdf"
     build_supporting_document_pdf(supp_pdf)
 
-    main_pdf = DOCS_DIR / "M2_C4_CodeSenseAI.pdf"
+    main_pdf = DOCS_DIR / "M2_PE-B25-04_CodeSenseAI.pdf"
     build_milestone2_main_pdf(main_pdf)
+    
+    shutil.copyfile(main_pdf, DOCS_DIR / "M2_C4_CodeSenseAI.pdf")
